@@ -12,7 +12,7 @@ struct HuffTree {
     int val{};
     char letter{};
     HuffTree* left, * right;
-    HuffTree(int val, char c) : val(val), letter(c){
+    HuffTree(int val, char c) : val(val), letter(c) {
         left = right = nullptr;
     }
 };
@@ -31,7 +31,7 @@ vector<pair<Freq, Letter>>Frequeny(string& str) {
     vector <pair<int, char>> freqs;
     for (int i = 0; i != str.size(); ++i) {
         if (hashmap[str[i]]) {
-            freqs.push_back({hashmap[str[i]], str[i] });
+            freqs.push_back({ hashmap[str[i]], str[i] });
             hashmap[str[i]] = 0;
         }
     }
@@ -44,7 +44,13 @@ typedef priority_queue<HuffTree*, vector<HuffTree*>, Compare >TREE;
 void PrintFrequency(TREE tree) {
     cout << "\nFrequency of each character: \n";
     while (tree.size()) {
-        cout << "\t" << tree.top()->letter << "->" << tree.top()->val << "\n";
+        string letter{};
+        if (tree.top()->letter == ' ') {
+            letter = "''";
+        }else {
+            letter = tree.top()->letter;
+        }
+        cout << "\t" << letter << " -> " << tree.top()->val << "\n";
         tree.pop();
     }
 }
@@ -69,7 +75,13 @@ HuffTree* GrowTree(vector<pair<int, char>>& freqs) {
 // Print Huffman tree
 void PrintHuffTree(vector<pair<char, string>>& res, string& str) {
     for (auto& r : res) {
-        cout << "\t" << r.first << " " << r.second << "\n";
+        string letter{};
+        if (r.first == ' ') {
+            letter = "''";
+        }else {
+            letter = r.first;
+        }
+        cout << "\t" << letter << " ->  " << r.second << "\n";
         str += r.second;
     }
 }
@@ -93,15 +105,16 @@ string Decode(HuffTree* tree, string str, int& index) {
         }
         else if (str[index] == '0') {
             if (tree->left) {
-                tree = tree->left; 
+                tree = tree->left;
                 index++;
-            }else {
+            }
+            else {
                 return ans;
             }
         }
         else if (str[index] == '1') {
             if (tree->right) {
-                tree = tree->right; 
+                tree = tree->right;
                 index++;
             }
             else {
@@ -112,7 +125,7 @@ string Decode(HuffTree* tree, string str, int& index) {
     return "";
 }
 // Drive main program
-int main(){
+int main() {
     string str{}; cout << "Enter a string input: \t";
     // accept spaces as character
     getline(std::cin, str);
